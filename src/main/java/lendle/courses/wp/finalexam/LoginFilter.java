@@ -16,6 +16,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -71,7 +72,12 @@ public class LoginFilter implements Filter {
             HttpSession session=httpRequest.getSession();
             //完成 filter 的部分，當 session 中沒有 id 參數時，轉址到 /login.jsp
             //否則正常執行 (30%)
-            
+            String id=(String)session.getAttribute("id"); 
+            if(id==null){ //當 session 中沒有 id 參數時
+                request.getRequestDispatcher("/login.jsp").forward(request, response); //否則轉址到 /login.jsp
+            }
+            else
+            chain.doFilter(request, response); //否則正常執行
             
             ///////////////////////////////////////////////////////////////
         } catch (Throwable t) {
